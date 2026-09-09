@@ -41,7 +41,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 01-03: Empacotar containers, ambiente local/EasyPanel e gates de qualidade.
+- [x] 01-03: Empacotar containers, ambiente local/EasyPanel e gates de qualidade.
 
 ### Phase 2: Dados Confiáveis
 
@@ -136,7 +136,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Fundação Executável | 2/3 | In Progress|  |
+| 1. Fundação Executável | 3/3 | Verification |  |
 | 2. Dados Confiáveis | 0/3 | Not started | - |
 | 3. Lotes com Valor Mensurável | 0/3 | Not started | - |
 | 4. Descoberta e Enriquecimento Real | 0/3 | Not started | - |

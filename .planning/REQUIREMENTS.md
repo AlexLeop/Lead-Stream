@@ -12,7 +12,7 @@
 - [x] **FND-03**: Aplicação usa PostgreSQL nativo como fonte operacional de verdade com migrações reproduzíveis.
 - [x] **FND-04**: Toda entidade de negócio pertence a um tenant, com tenant interno aplicado automaticamente no uso inicial.
 - [x] **FND-05**: Operador pode verificar a integração Appwrite sem usar TablesDB como substituto do ORM Django.
-- [ ] **FND-06**: Operador pode executar API, worker, broker, cache e banco em ambiente local e implantar serviços equivalentes no EasyPanel.
+- [x] **FND-06**: Operador pode executar API, worker, broker, cache e banco em ambiente local e implantar serviços equivalentes no EasyPanel.
 - [x] **FND-07**: API publica contrato OpenAPI versionado sob `/api/v1` e mensagens operacionais em português do Brasil.
 
 ### Modelo canônico e evidências
@@ -80,7 +80,7 @@
 - [x] **OPS-01**: Logs estruturados correlacionam request, tenant, lote, chunk e provedor com redação de dados sensíveis.
 - [ ] **OPS-02**: Métricas mostram filas, latência, erros, retries, circuit breakers, custo e cobertura por fonte.
 - [ ] **OPS-03**: Testes não dependem de rede real e cobrem transações, idempotência, replay, promoção de evidência e isolamento de tenant.
-- [ ] **OPS-04**: Pipeline de qualidade executa lint, tipos, migrations check e testes antes do build de produção.
+- [x] **OPS-04**: Pipeline de qualidade executa lint, tipos, migrations check e testes antes do build de produção.
 - [ ] **OPS-05**: Operador possui runbook de implantação, backup, restore, rotação de credenciais e recuperação de lote.
 
 ## v2 Requirements
@@ -117,8 +117,8 @@
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| FND-01, FND-02, FND-03, FND-04, FND-05, FND-06, FND-07 | Phase 1 | Pending |
-| OPS-01, OPS-04 | Phase 1 | Pending |
+| FND-01, FND-02, FND-03, FND-04, FND-05, FND-06, FND-07 | Phase 1 | Complete |
+| OPS-01, OPS-04 | Phase 1 | Complete |
 | DATA-01, DATA-02, DATA-03, DATA-04, DATA-05, DATA-06 | Phase 2 | Pending |
 | COMP-01, COMP-02, COMP-03 | Phase 2 | Pending |
 | HYG-01, HYG-02, HYG-03 | Phase 3 | Pending |
@@ -140,4 +140,4 @@
 
 ---
 *Requirements defined: 2026-09-09*
-*Last updated: 2026-09-09 after roadmap creation*
+*Last updated: 2026-09-09 after Phase 1 execution*

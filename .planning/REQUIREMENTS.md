@@ -8,12 +8,12 @@
 ### Fundação e configuração
 
 - [ ] **FND-01**: Operador pode consultar endpoints de vida e prontidão que verificam aplicação e dependências separadamente.
-- [ ] **FND-02**: Aplicação carrega configuração exclusivamente do ambiente, falha de forma segura e nunca registra segredos.
-- [ ] **FND-03**: Aplicação usa PostgreSQL nativo como fonte operacional de verdade com migrações reproduzíveis.
-- [ ] **FND-04**: Toda entidade de negócio pertence a um tenant, com tenant interno aplicado automaticamente no uso inicial.
+- [x] **FND-02**: Aplicação carrega configuração exclusivamente do ambiente, falha de forma segura e nunca registra segredos.
+- [x] **FND-03**: Aplicação usa PostgreSQL nativo como fonte operacional de verdade com migrações reproduzíveis.
+- [x] **FND-04**: Toda entidade de negócio pertence a um tenant, com tenant interno aplicado automaticamente no uso inicial.
 - [ ] **FND-05**: Operador pode verificar a integração Appwrite sem usar TablesDB como substituto do ORM Django.
 - [ ] **FND-06**: Operador pode executar API, worker, broker, cache e banco em ambiente local e implantar serviços equivalentes no EasyPanel.
-- [ ] **FND-07**: API publica contrato OpenAPI versionado sob `/api/v1` e mensagens operacionais em português do Brasil.
+- [x] **FND-07**: API publica contrato OpenAPI versionado sob `/api/v1` e mensagens operacionais em português do Brasil.
 
 ### Modelo canônico e evidências
 
@@ -133,6 +133,7 @@
 | COMP-04, OPS-05 | Phase 5 | Pending |
 
 **Coverage:**
+
 - v1 requirements: 51 total
 - Mapped to phases: 51
 - Unmapped: 0 ✓

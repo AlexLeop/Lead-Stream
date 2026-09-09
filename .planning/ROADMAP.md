@@ -33,7 +33,7 @@ O backend evolui em cinco fatias verticais. Primeiro nasce um serviço implantá
 Plans:
 **Wave 1**
 
-- [ ] 01-01: Estruturar projeto, configuração, PostgreSQL e tenant interno.
+- [x] 01-01: Estruturar projeto, configuração, PostgreSQL e tenant interno.
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -136,7 +136,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Fundação Executável | 0/3 | Not started | - |
+| 1. Fundação Executável | 1/3 | In Progress|  |
 | 2. Dados Confiáveis | 0/3 | Not started | - |
 | 3. Lotes com Valor Mensurável | 0/3 | Not started | - |
 | 4. Descoberta e Enriquecimento Real | 0/3 | Not started | - |

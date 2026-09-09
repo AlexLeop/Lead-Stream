@@ -2,7 +2,7 @@
 
 **Generated:** 2026-09-09
 **Phase:** 01-funda-o-execut-vel
-**Status:** Incomplete
+**Status:** Incomplete — aguardando rotação e cadastro no EasyPanel
 
 O código, os mocks e os testes automatizados já estão prontos. Os itens abaixo exigem acesso humano ao Appwrite e, depois, ao painel do EasyPanel. Nunca copie os valores reais para arquivos versionados.
 
@@ -25,6 +25,31 @@ O código, os mocks e os testes automatizados já estão prontos. Os itens abaix
 - [ ] **Confirmar HTTPS válido na instância Appwrite**
   - Location: domínio público configurado no EasyPanel/proxy.
   - Set to: certificado confiável; o backend não desabilita verificação TLS.
+
+## Variáveis de ambiente — aplicação e infraestrutura
+
+Cadastre os nomes listados em `deploy/env.production.example` nos serviços `leadstream-api`,
+`leadstream-worker` e `leadstream-release`. Os três devem usar a mesma tag imutável da imagem e
+o mesmo conjunto de configurações, exceto pelo comando de execução.
+
+- [ ] Gerar um `DJANGO_SECRET_KEY` novo e exclusivo.
+- [ ] Definir `DJANGO_ALLOWED_HOSTS` com o domínio final da API.
+- [ ] Cadastrar a URL do PostgreSQL já criado diretamente no cofre como `DATABASE_URL`.
+- [ ] Manter `DATABASE_SSL_REQUIRED=false` somente se a conexão permanecer integralmente na
+  rede privada do EasyPanel; habilitar TLS para banco externo.
+- [ ] Criar RabbitMQ e Redis privados e cadastrar `CELERY_BROKER_URL` e `REDIS_URL`.
+- [ ] Proteger o domínio com allowlist, VPN ou Cloudflare Access antes de publicá-lo, pois esta
+  versão interna não possui autenticação no produto.
+- [ ] Garantir volumes persistentes e backup do PostgreSQL antes de inserir dados reais.
+
+## Ordem da primeira implantação
+
+- [ ] Executar localmente `scripts/quality.ps1` ou `scripts/quality.sh`.
+- [ ] Construir uma imagem com tag do commit e cadastrá-la nos três serviços.
+- [ ] Executar `leadstream-release` uma única vez para aplicar migrations.
+- [ ] Publicar a API e confirmar `/health/live` e `/health/ready`.
+- [ ] Publicar o worker e confirmar `/health/dependencies`.
+- [ ] Seguir integralmente `deploy/easypanel.md`.
 
 ## Verificação
 

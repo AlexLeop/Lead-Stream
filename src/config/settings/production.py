@@ -42,4 +42,14 @@ SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_REFERRER_POLICY = "same-origin"
+SECURE_HSTS_SECONDS = env_int("DJANGO_SECURE_HSTS_SECONDS", default=3600)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = env_bool(
+    "DJANGO_SECURE_HSTS_INCLUDE_SUBDOMAINS", default=False
+)
+SECURE_HSTS_PRELOAD = env_bool("DJANGO_SECURE_HSTS_PRELOAD", default=False)
 X_FRAME_OPTIONS = "DENY"
+
+# HSTS de subdomínios e preload permanecem opt-in: habilitá-los sem controlar todos os
+# subdomínios pode bloquear serviços legítimos. O gate continua falhando para qualquer outro
+# alerta de implantação.
+SILENCED_SYSTEM_CHECKS = ["security.W005", "security.W021"]

@@ -1,0 +1,32 @@
+# Credenciais e configurações locais
+.env
+.env.*
+!.env.example
+!deploy/env.production.example
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Django
+*.sqlite3
+staticfiles/
+media/
+
+# Ferramentas e sistema operacional
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
+# Artefatos temporários
+dist/
+build/
+*.egg-info/

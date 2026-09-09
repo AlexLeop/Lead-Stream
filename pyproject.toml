@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=80"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "leadstream-backend"
+version = "0.1.0"
+description = "Backend Brasil-first para higienização e enriquecimento confiável de leads B2B."
+readme = "README.md"
+requires-python = ">=3.13,<3.15"
+dependencies = [
+  "Django>=5.2,<5.3",
+  "appwrite>=24,<25",
+  "celery[redis]>=5.6,<5.7",
+  "dj-database-url>=3,<4",
+  "django-filter>=25,<26",
+  "djangorestframework>=3.18,<3.19",
+  "drf-spectacular>=0.30,<0.31",
+  "gunicorn>=23,<24",
+  "httpx>=0.28,<0.29",
+  "psycopg[binary,pool]>=3.2,<4",
+  "redis>=6,<7",
+  "structlog>=25,<26",
+  "uvicorn-worker>=0.4,<0.5",
+]
+
+[project.optional-dependencies]
+dev = [
+  "django-stubs[compatible-mypy]>=5.2,<5.3",
+  "mypy>=1.18,<2",
+  "pytest>=8,<10",
+  "pytest-cov>=6,<8",
+  "pytest-django>=4.11,<5",
+  "ruff>=0.13,<1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings.test"
+pythonpath = ["src"]
+testpaths = ["tests"]
+addopts = "--strict-markers --strict-config"
+
+[tool.ruff]
+target-version = "py313"
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "DJ", "RUF"]
+ignore = ["DJ001"]
+
+[tool.ruff.lint.per-file-ignores]
+"src/**/migrations/*.py" = ["E501"]
+
+[tool.mypy]
+python_version = "3.13"
+plugins = ["mypy_django_plugin.main"]
+strict = true
+mypy_path = "src"
+exclude = ["src/.*/migrations/"]
+
+[tool.django-stubs]
+django_settings_module = "config.settings.test"
+
+[[tool.mypy.overrides]]
+module = ["appwrite.*"]
+ignore_missing_imports = true

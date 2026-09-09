@@ -115,13 +115,28 @@
 
 ## Traceability
 
-Preenchida durante a criação do roadmap.
+| Requirement | Phase | Status |
+|-------------|-------|--------|
+| FND-01, FND-02, FND-03, FND-04, FND-05, FND-06, FND-07 | Phase 1 | Pending |
+| OPS-01, OPS-04 | Phase 1 | Pending |
+| DATA-01, DATA-02, DATA-03, DATA-04, DATA-05, DATA-06 | Phase 2 | Pending |
+| COMP-01, COMP-02, COMP-03 | Phase 2 | Pending |
+| HYG-01, HYG-02, HYG-03 | Phase 3 | Pending |
+| BATCH-01, BATCH-02, BATCH-03, BATCH-04, BATCH-05 | Phase 3 | Pending |
+| BILL-01, BILL-02, BILL-03, BILL-04, BILL-05 | Phase 3 | Pending |
+| OPS-03 | Phase 3 | Pending |
+| DISC-01, DISC-02 | Phase 4 | Pending |
+| PROV-01, PROV-02, PROV-03, PROV-04, PROV-05, PROV-06, PROV-07 | Phase 4 | Pending |
+| OPS-02 | Phase 4 | Pending |
+| EXP-01, EXP-02, EXP-03 | Phase 5 | Pending |
+| CRM-01, CRM-02, CRM-03, CRM-04 | Phase 5 | Pending |
+| COMP-04, OPS-05 | Phase 5 | Pending |
 
 **Coverage:**
 - v1 requirements: 51 total
-- Mapped to phases: 0
-- Unmapped: 51
+- Mapped to phases: 51
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-09-09*
-*Last updated: 2026-09-09 after initial definition*
+*Last updated: 2026-09-09 after roadmap creation*

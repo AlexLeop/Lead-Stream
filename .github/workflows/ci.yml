@@ -44,8 +44,11 @@ jobs:
       - name: Validar migrations no PostgreSQL
         env:
           DJANGO_SETTINGS_MODULE: config.settings.development
+          DJANGO_ALLOWED_HOSTS: testserver
           DATABASE_URL: postgresql://leadstream_ci:ci-only-password@localhost:5432/leadstream_ci
-        run: .venv/bin/python manage.py migrate --noinput
+        run: |
+          .venv/bin/python manage.py migrate --noinput
+          .venv/bin/python manage.py shell -c "from django.test import Client; c = Client(); assert c.get('/health/ready').status_code == 200; assert c.get('/api/v1/workspace/').status_code == 200"
 
       - name: Executar gates de qualidade
         run: sh scripts/quality.sh

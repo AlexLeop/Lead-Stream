@@ -7,11 +7,11 @@
 
 ### Fundação e configuração
 
-- [ ] **FND-01**: Operador pode consultar endpoints de vida e prontidão que verificam aplicação e dependências separadamente.
+- [x] **FND-01**: Operador pode consultar endpoints de vida e prontidão que verificam aplicação e dependências separadamente.
 - [x] **FND-02**: Aplicação carrega configuração exclusivamente do ambiente, falha de forma segura e nunca registra segredos.
 - [x] **FND-03**: Aplicação usa PostgreSQL nativo como fonte operacional de verdade com migrações reproduzíveis.
 - [x] **FND-04**: Toda entidade de negócio pertence a um tenant, com tenant interno aplicado automaticamente no uso inicial.
-- [ ] **FND-05**: Operador pode verificar a integração Appwrite sem usar TablesDB como substituto do ORM Django.
+- [x] **FND-05**: Operador pode verificar a integração Appwrite sem usar TablesDB como substituto do ORM Django.
 - [ ] **FND-06**: Operador pode executar API, worker, broker, cache e banco em ambiente local e implantar serviços equivalentes no EasyPanel.
 - [x] **FND-07**: API publica contrato OpenAPI versionado sob `/api/v1` e mensagens operacionais em português do Brasil.
 
@@ -77,7 +77,7 @@
 
 ### Operação e qualidade
 
-- [ ] **OPS-01**: Logs estruturados correlacionam request, tenant, lote, chunk e provedor com redação de dados sensíveis.
+- [x] **OPS-01**: Logs estruturados correlacionam request, tenant, lote, chunk e provedor com redação de dados sensíveis.
 - [ ] **OPS-02**: Métricas mostram filas, latência, erros, retries, circuit breakers, custo e cobertura por fonte.
 - [ ] **OPS-03**: Testes não dependem de rede real e cobrem transações, idempotência, replay, promoção de evidência e isolamento de tenant.
 - [ ] **OPS-04**: Pipeline de qualidade executa lint, tipos, migrations check e testes antes do build de produção.

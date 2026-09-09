@@ -37,7 +37,7 @@ Plans:
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
-- [ ] 01-02: Implementar health, OpenAPI, Appwrite adapter e observabilidade segura.
+- [x] 01-02: Implementar health, OpenAPI, Appwrite adapter e observabilidade segura.
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
@@ -136,7 +136,7 @@ Plans:
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Fundação Executável | 1/3 | In Progress|  |
+| 1. Fundação Executável | 2/3 | In Progress|  |
 | 2. Dados Confiáveis | 0/3 | Not started | - |
 | 3. Lotes com Valor Mensurável | 0/3 | Not started | - |
 | 4. Descoberta e Enriquecimento Real | 0/3 | Not started | - |

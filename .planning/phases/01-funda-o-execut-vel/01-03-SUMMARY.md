@@ -53,15 +53,15 @@ completed: 2026-09-09
 - **Started:** 2026-09-09T20:12:25-03:00
 - **Completed:** 2026-09-09T20:28:00-03:00
 - **Tasks:** 3
-- **Files modified:** 18
+- **Files modified:** 19
 
 ## Accomplishments
 
 - Celery usa RabbitMQ com acknowledgement tardio, prefetch conservador e payload restrito a UUID.
 - A mesma imagem não-root executa API, worker ou release com comandos separados e migrations controladas.
 - Compose mantém PostgreSQL, RabbitMQ e Redis privados, persistentes e com health checks.
-- Um único comando executa Ruff, mypy, drift de migrations, check de produção e 18 testes.
-- CI valida PostgreSQL real, os mesmos gates locais e o build Docker antes de aceitar mudanças.
+- Um único comando executa Ruff, mypy, drift de migrations, check de produção e 20 testes.
+- CI aplica migrations e consulta prontidão/workspace em PostgreSQL real antes dos gates e do build.
 - Runbook pt-BR documenta recursos iniciais da VPS, probes, rollback, proteção perimetral e rotação.
 
 ## Task Commits
@@ -79,6 +79,7 @@ completed: 2026-09-09
 - `scripts/release.sh` - migrations e validação de produção fora do startup concorrente.
 - `scripts/quality.ps1`, `scripts/quality.sh` - gates equivalentes para Windows e Linux.
 - `.github/workflows/ci.yml` - PostgreSQL de integração, quality gate e build da imagem.
+- `tests/test_production_settings.py` - regressão para ausência de variáveis e rejeição de SQLite.
 - `deploy/easypanel.md` - procedimento completo de primeira implantação e rollback.
 - `deploy/env.production.example` - checklist de variáveis sem valores reais.
 - `README.md` - estado, arquitetura, execução, qualidade e implantação.
@@ -102,9 +103,17 @@ completed: 2026-09-09
 - **Verification:** `manage.py check --deploy --fail-level WARNING` passou sem alertas não tratados.
 - **Committed in:** `036733d`
 
+**2. [Rule 2 - Missing Critical] Regressão fail-closed e smoke PostgreSQL no CI**
+- **Found during:** verificação adversarial da fase
+- **Issue:** o comportamento fail-closed existia, mas não tinha teste de regressão; o CI aplicava migrations no PostgreSQL sem consultar as rotas reais.
+- **Fix:** adicionados dois testes isolados de settings e smoke de `/health/ready` e `/api/v1/workspace/` sobre o PostgreSQL do CI.
+- **Files modified:** `tests/test_production_settings.py`, `.github/workflows/ci.yml`.
+- **Verification:** quality gate passou com 20 testes; comandos equivalentes passaram localmente.
+- **Committed in:** `e662c74`
+
 ---
 
-**Total deviations:** 1 auto-fixed (1 controle crítico ausente). **Impact:** endurecimento necessário, sem ampliar o escopo funcional.
+**Total deviations:** 2 auto-fixed (2 controles críticos ausentes). **Impact:** endurecimento e cobertura necessários, sem ampliar o escopo funcional.
 
 ## Issues Encountered
 
@@ -126,7 +135,7 @@ completed: 2026-09-09
 
 ## Self-Check: PASSED
 
-- Ruff, mypy, migration check, check de produção e 18 testes passaram.
+- Ruff, mypy, migration check, check de produção e 20 testes passaram.
 - `docker compose config --quiet` passou e nenhum marcador das credenciais reais foi encontrado.
 - Dockerfile declara usuário não-root e health check; o build local ficou indisponível pelo daemon, não por erro detectado no projeto.
 

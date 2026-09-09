@@ -16,7 +16,7 @@ O backend evolui em cinco fatias verticais. Primeiro nasce um serviço implantá
 
 ### Phase 1: Fundação Executável
 
-**Goal**: Entregar uma API Django independente, segura e implantável, com PostgreSQL, tenant interno, infraestrutura e observabilidade básica.
+**Goal**: As an internal operator, I want to start an independent Django API securely connected to its infrastructure, so that I have a deployable and observable foundation for LeadStream.
 **Mode:** mvp
 **Depends on**: Nothing (first phase)
 **Requirements**: FND-01, FND-02, FND-03, FND-04, FND-05, FND-06, FND-07, OPS-01, OPS-04

@@ -2,9 +2,9 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 01-03-PLAN.md; phase verification pending
-last_updated: "2026-09-09T23:28:00.000Z"
+status: human_needed
+stopped_at: Phase 1 automated verification passed; container and EasyPanel UAT pending
+last_updated: "2026-09-09T23:39:00.000Z"
 last_activity: 2026-09-09
 progress:
   total_phases: 5
@@ -25,9 +25,9 @@ See: .planning/PROJECT.md (updated 2026-09-09)
 
 ## Current Position
 
-Phase: 1 (Fundação Executável) — VERIFYING
+Phase: 1 (Fundação Executável) — HUMAN VERIFICATION
 Plan: 3 of 3
-Status: Plan complete; phase verification pending
+Status: Automated checks passed; 2 infrastructure smokes pending
 Last activity: 2026-09-09
 
 Progress: [░░░░░░░░░░] 0%
@@ -53,7 +53,7 @@ Progress: [░░░░░░░░░░] 0%
 
 | Phase 1 P01 | 14 min | 3 tasks | 27 files |
 | Phase 1 P02 | 9 min | 3 tasks | 12 files |
-| Phase 1 P03 | 16 min | 3 tasks | 18 files |
+| Phase 1 P03 | 16 min | 3 tasks | 19 files |
 
 ## Accumulated Context
 
@@ -76,6 +76,7 @@ None yet.
 - Credenciais compartilhadas no chat precisam ser rotacionadas antes do deploy produtivo.
 - Integrações pagas exigem credenciais e contratos apenas na Phase 4.
 - O daemon Docker local não respondeu; Compose e gates passaram, e a CI repetirá o build da imagem.
+- A fase não será marcada como concluída até validar a stack em containers e no EasyPanel.
 
 ## Deferred Items
 
@@ -86,6 +87,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-09-09T23:28:00.000Z
-Stopped at: Completed 01-03-PLAN.md; phase verification pending
+Last session: 2026-09-09T23:39:00.000Z
+Stopped at: Phase 1 automated verification passed; container and EasyPanel UAT pending
 Resume file: None

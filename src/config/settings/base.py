@@ -5,6 +5,7 @@ from pathlib import Path
 import dj_database_url
 
 from leadstream.common.env import env, env_bool, env_int, env_list
+from leadstream.common.logging import build_logging_config
 
 BASE_DIR = Path(__file__).resolve().parents[3]
 
@@ -22,6 +23,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "leadstream.common.request_context.RequestContextMiddleware",
     "django.middleware.common.CommonMiddleware",
 ]
 
@@ -59,6 +61,8 @@ APPWRITE_ENDPOINT = env("APPWRITE_ENDPOINT")
 APPWRITE_PROJECT_ID = env("APPWRITE_PROJECT_ID")
 APPWRITE_API_KEY = env("APPWRITE_API_KEY")
 APPWRITE_TIMEOUT_SECONDS = env_int("APPWRITE_TIMEOUT_SECONDS", default=3)
+LOG_LEVEL = env("LOG_LEVEL", default="INFO")
+LOGGING = build_logging_config(LOG_LEVEL)
 
 LANGUAGE_CODE = "pt-br"
 TIME_ZONE = "America/Sao_Paulo"

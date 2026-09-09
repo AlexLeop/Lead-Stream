@@ -1,30 +1,61 @@
 from __future__ import annotations
 
-from django.http import HttpRequest, JsonResponse
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import extend_schema
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.request import Request
+from rest_framework.response import Response
 
 from .health import HealthResult, check_database, check_dependencies
 
 
-def live(request: HttpRequest) -> JsonResponse:
+@extend_schema(
+    operation_id="consultar_vida",
+    summary="Verificar processo da API",
+    responses={200: OpenApiTypes.OBJECT},
+    tags=["Saúde"],
+)
+@api_view(["GET"])
+@authentication_classes([])
+@permission_classes([])
+def live(request: Request) -> Response:
     del request
-    return JsonResponse({"status": "ok"})
+    return Response({"status": "ok"})
 
 
-def ready(request: HttpRequest) -> JsonResponse:
+@extend_schema(
+    operation_id="consultar_prontidao",
+    summary="Verificar prontidão da API e PostgreSQL",
+    responses={200: OpenApiTypes.OBJECT, 503: OpenApiTypes.OBJECT},
+    tags=["Saúde"],
+)
+@api_view(["GET"])
+@authentication_classes([])
+@permission_classes([])
+def ready(request: Request) -> Response:
     del request
     database = check_database()
     status_code = 200 if database.available else 503
-    return JsonResponse(
+    return Response(
         {"status": "ok" if database.available else "unavailable"},
         status=status_code,
     )
 
 
-def dependencies(request: HttpRequest) -> JsonResponse:
+@extend_schema(
+    operation_id="consultar_dependencias",
+    summary="Diagnosticar serviços opcionais",
+    responses={200: OpenApiTypes.OBJECT},
+    tags=["Saúde"],
+)
+@api_view(["GET"])
+@authentication_classes([])
+@permission_classes([])
+def dependencies(request: Request) -> Response:
     del request
     results = check_dependencies()
     overall = _aggregate_dependency_status(results)
-    return JsonResponse(
+    return Response(
         {
             "status": overall,
             "dependencias": {name: result.as_dict() for name, result in results.items()},

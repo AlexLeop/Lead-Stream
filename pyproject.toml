@@ -50,7 +50,7 @@ line-length = 100
 src = ["src", "tests"]
 
 [tool.ruff.lint]
-select = ["E", "F", "I", "B", "UP", "DJ", "RUF"]
+select = ["E", "F", "I", "B", "UP", "DJ", "RUF", "BLE"]
 ignore = ["DJ001"]
 
 [tool.ruff.lint.per-file-ignores]
@@ -67,5 +67,5 @@ exclude = ["src/.*/migrations/"]
 django_settings_module = "config.settings.test"
 
 [[tool.mypy.overrides]]
-module = ["appwrite.*"]
+module = ["appwrite.*", "celery.*", "kombu.*"]
 ignore_missing_imports = true

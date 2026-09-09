@@ -49,6 +49,13 @@ DATABASES = {
     )
 }
 
+CELERY_BROKER_URL = env(
+    "CELERY_BROKER_URL",
+    default="amqp://leadstream:leadstream@localhost:5672//",
+)
+REDIS_URL = env("REDIS_URL", default="redis://localhost:6379/0")
+DEPENDENCY_CHECK_TIMEOUT_SECONDS = env_int("DEPENDENCY_CHECK_TIMEOUT_SECONDS", default=2)
+
 LANGUAGE_CODE = "pt-br"
 TIME_ZONE = "America/Sao_Paulo"
 USE_I18N = True

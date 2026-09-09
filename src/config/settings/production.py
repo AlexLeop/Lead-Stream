@@ -24,6 +24,9 @@ DATABASES = {
 if DATABASES["default"]["ENGINE"] != "django.db.backends.postgresql":
     raise ImproperlyConfigured("DATABASE_URL deve apontar para PostgreSQL em produção.")
 
+if APPWRITE_ENDPOINT and not APPWRITE_ENDPOINT.startswith("https://"):  # noqa: F405
+    raise ImproperlyConfigured("APPWRITE_ENDPOINT deve usar HTTPS em produção.")
+
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 SECURE_SSL_REDIRECT = env_bool("DJANGO_SECURE_SSL_REDIRECT", default=True)
 SESSION_COOKIE_SECURE = True

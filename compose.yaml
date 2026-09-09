@@ -1,0 +1,115 @@
+name: leadstream-backend
+
+x-app-environment: &app-environment
+  DJANGO_SETTINGS_MODULE: config.settings.production
+  DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY:-local-development-only-change-me}
+  DJANGO_ALLOWED_HOSTS: ${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,api}
+  DJANGO_SECURE_SSL_REDIRECT: "false"
+  DATABASE_URL: postgresql://leadstream:${POSTGRES_PASSWORD:-leadstream}@postgres:5432/leadstream
+  CELERY_BROKER_URL: amqp://leadstream:${RABBITMQ_PASSWORD:-leadstream}@rabbitmq:5672//
+  REDIS_URL: redis://redis:6379/0
+  APPWRITE_ENDPOINT: ${APPWRITE_ENDPOINT:-}
+  APPWRITE_PROJECT_ID: ${APPWRITE_PROJECT_ID:-}
+  APPWRITE_API_KEY: ${APPWRITE_API_KEY:-}
+  APPWRITE_TIMEOUT_SECONDS: ${APPWRITE_TIMEOUT_SECONDS:-3}
+  LOG_LEVEL: ${LOG_LEVEL:-INFO}
+
+x-app-service: &app-service
+  build:
+    context: .
+    target: runtime
+  image: leadstream-backend:local
+  environment: *app-environment
+  init: true
+  restart: unless-stopped
+  networks: [backend]
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: leadstream
+      POSTGRES_USER: leadstream
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-leadstream}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U leadstream -d leadstream"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+    networks: [backend]
+
+  rabbitmq:
+    image: rabbitmq:4-management-alpine
+    environment:
+      RABBITMQ_DEFAULT_USER: leadstream
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-leadstream}
+      RABBITMQ_DEFAULT_VHOST: /
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+    networks: [backend]
+
+  redis:
+    image: redis:8-alpine
+    command: ["redis-server", "--appendonly", "yes", "--maxmemory", "256mb", "--maxmemory-policy", "noeviction"]
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+    restart: unless-stopped
+    networks: [backend]
+
+  release:
+    <<: *app-service
+    command: ["sh", "scripts/release.sh"]
+    restart: "no"
+    profiles: ["release"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  api:
+    <<: *app-service
+    ports:
+      - "127.0.0.1:8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/live', timeout=2).read()"]
+      interval: 30s
+      timeout: 3s
+      start_period: 20s
+      retries: 3
+
+  worker:
+    <<: *app-service
+    command: ["celery", "-A", "config.celery:app", "worker", "--loglevel=INFO", "--concurrency=2"]
+    stop_grace_period: 60s
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  postgres-data:
+  rabbitmq-data:
+  redis-data:

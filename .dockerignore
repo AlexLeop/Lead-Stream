@@ -1,0 +1,17 @@
+.git
+.github
+.planning
+.venv
+__pycache__
+*.py[cod]
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+.env
+.env.*
+!.env.example
+tests
+data
+media
+staticfiles

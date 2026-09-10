@@ -1,11 +1,26 @@
 from __future__ import annotations
 
+import dj_database_url
+
+from leadstream.common.env import env
+
 from .base import *  # noqa: F403
 
 DEBUG = False
 SECRET_KEY = "test-only-secret-key"
 ALLOWED_HOSTS = ["testserver", "localhost"]
-DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
+TEST_DATABASE_URL = env("TEST_DATABASE_URL")
+DATABASES = (
+    {
+        "default": dj_database_url.parse(
+            TEST_DATABASE_URL,
+            conn_max_age=0,
+            conn_health_checks=True,
+        )
+    }
+    if TEST_DATABASE_URL
+    else {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
+)
 PASSWORD_HASHERS = ["django.contrib.auth.hashers.MD5PasswordHasher"]
 CELERY_TASK_ALWAYS_EAGER = True
 CELERY_TASK_EAGER_PROPAGATES = True

@@ -4,7 +4,7 @@ from typing import Any
 
 from celery import shared_task
 
-from .services import ingest_batch, process_chunk
+from .services import ingest_batch, process_chunk, recover_stalled_work
 
 
 @shared_task(name="leadstream.batches.ingest", ignore_result=True)  # type: ignore[untyped-decorator]
@@ -23,3 +23,8 @@ def process_chunk_task(self: Any, chunk_id: str) -> None:
     result = process_chunk(chunk_id=chunk_id, worker_id=str(request.id))
     if result.retryable:
         raise self.retry(countdown=10)
+
+
+@shared_task(name="leadstream.batches.recover", ignore_result=True)  # type: ignore[untyped-decorator]
+def recover_stalled_work_task() -> None:
+    recover_stalled_work()

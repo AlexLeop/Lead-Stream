@@ -2,17 +2,18 @@ from __future__ import annotations
 
 import csv
 import io
+import logging
 import math
 import socket
 from dataclasses import dataclass
-from datetime import timedelta
+from datetime import datetime, timedelta
 from pathlib import Path
 from uuid import UUID
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError, transaction
-from django.db.models import Count
+from django.db.models import Count, Q
 from django.utils import timezone
 
 from leadstream.entities.normalization import DataValidationError
@@ -22,6 +23,8 @@ from leadstream.tenancy.models import Tenant
 from .hygiene import normalize_row, original_json
 from .models import Batch, BatchChunk, BatchItem, ProcessingAttempt
 from .storage import ChunkedUpload, delete_input, open_input, save_upload
+
+logger = logging.getLogger(__name__)
 
 TERMINAL_BATCH_STATUSES = {
     Batch.Status.CANCELLED,
@@ -57,21 +60,38 @@ def _validate_idempotency_key(value: str) -> str:
     return key
 
 
-def _publish_ingestion(batch_id: object) -> None:
+def _publish_ingestion(batch_id: UUID | str) -> None:
     from .tasks import ingest_batch_task
 
-    ingest_batch_task.delay(str(batch_id))
+    try:
+        ingest_batch_task.delay(str(batch_id))
+    except Exception:
+        logger.exception("batch_ingestion_dispatch_failed", extra={"batch_id": str(batch_id)})
 
 
-def _publish_chunk(chunk_id: object) -> None:
+def _publish_chunk(chunk_id: UUID | str) -> None:
     from .tasks import process_chunk_task
 
-    process_chunk_task.delay(str(chunk_id))
+    BatchChunk.objects.filter(pk=chunk_id, status=BatchChunk.Status.PENDING).update(
+        dispatched_at=timezone.now()
+    )
+    try:
+        process_chunk_task.delay(str(chunk_id))
+    except Exception:
+        BatchChunk.objects.filter(pk=chunk_id, status=BatchChunk.Status.PENDING).update(
+            dispatched_at=None
+        )
+        logger.exception("batch_chunk_dispatch_failed", extra={"chunk_id": str(chunk_id)})
 
 
 def _publish_chunks(chunk_ids: list[UUID]) -> None:
     for chunk_id in chunk_ids:
         _publish_chunk(chunk_id)
+
+
+def _publish_ingestions(batch_ids: list[UUID]) -> None:
+    for batch_id in batch_ids:
+        _publish_ingestion(batch_id)
 
 
 def create_csv_batch(
@@ -287,6 +307,7 @@ def claim_chunk(
     chunk.status = BatchChunk.Status.RUNNING
     chunk.lease_owner = worker_id[:255]
     chunk.leased_until = now + timedelta(seconds=settings.BATCH_LEASE_SECONDS)
+    chunk.dispatched_at = chunk.dispatched_at or now
     chunk.started_at = chunk.started_at or now
     chunk.save()
     attempt = ProcessingAttempt.objects.create(
@@ -407,6 +428,7 @@ def process_chunk(*, chunk_id: UUID | str, worker_id: str | None = None) -> Chun
             locked_chunk.status = BatchChunk.Status.COMPLETED
             locked_chunk.lease_owner = ""
             locked_chunk.leased_until = None
+            locked_chunk.dispatched_at = None
             locked_chunk.completed_at = timezone.now()
             locked_chunk.save()
             attempt.status = ProcessingAttempt.Status.SUCCEEDED
@@ -475,6 +497,7 @@ def resume_batch(*, tenant: Tenant, batch_id: UUID | str) -> Batch:
     batch.status = Batch.Status.QUEUED
     batch.save(update_fields=("status", "updated_at"))
     batch.chunks.filter(status=BatchChunk.Status.PAUSED).update(status=BatchChunk.Status.PENDING)
+    batch.chunks.filter(status=BatchChunk.Status.PENDING).update(dispatched_at=None)
     ids = list(batch.chunks.filter(status=BatchChunk.Status.PENDING).values_list("pk", flat=True))
     transaction.on_commit(lambda: _publish_chunks(ids))
     return batch
@@ -507,3 +530,45 @@ def batch_eta_seconds(batch: Batch) -> int | None:
     elapsed = max((timezone.now() - batch.started_at).total_seconds(), 1)
     rate = batch.processed_rows / elapsed
     return math.ceil((batch.total_rows - batch.processed_rows) / rate)
+
+
+@transaction.atomic
+def recover_stalled_work(*, now: datetime | None = None) -> dict[str, int]:
+    check_time = now or timezone.now()
+    dispatch_cutoff = check_time - timedelta(minutes=5)
+    expired_chunks = list(
+        BatchChunk.objects.select_for_update()
+        .filter(
+            status=BatchChunk.Status.RUNNING,
+            leased_until__isnull=False,
+            leased_until__lte=check_time,
+        )
+        .exclude(batch__status__in=TERMINAL_BATCH_STATUSES)
+    )
+    for chunk in expired_chunks:
+        ProcessingAttempt.objects.filter(
+            chunk=chunk, status=ProcessingAttempt.Status.STARTED
+        ).update(status=ProcessingAttempt.Status.ABANDONED, finished_at=check_time)
+        chunk.status = BatchChunk.Status.PENDING
+        chunk.lease_owner = ""
+        chunk.leased_until = None
+        chunk.dispatched_at = None
+        chunk.save()
+    ingestion_ids = list(
+        Batch.objects.filter(status=Batch.Status.RECEIVED).values_list("pk", flat=True)
+    )
+    pending_ids = list(
+        BatchChunk.objects.filter(
+            status=BatchChunk.Status.PENDING,
+            batch__status__in=(Batch.Status.QUEUED, Batch.Status.RUNNING),
+        )
+        .filter(Q(dispatched_at__isnull=True) | Q(dispatched_at__lte=dispatch_cutoff))
+        .values_list("pk", flat=True)
+    )
+    transaction.on_commit(lambda: _publish_ingestions(ingestion_ids))
+    transaction.on_commit(lambda: _publish_chunks(pending_ids))
+    return {
+        "ingestions_requeued": len(ingestion_ids),
+        "chunks_recovered": len(expired_chunks),
+        "chunks_requeued": len(pending_ids),
+    }

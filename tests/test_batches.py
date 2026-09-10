@@ -1,14 +1,17 @@
 from __future__ import annotations
 
+from datetime import timedelta
 from pathlib import Path
 from unittest.mock import patch
 
 import pytest
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.utils import timezone
 from rest_framework.test import APIClient
 
-from leadstream.batches.models import Batch, BatchChunk, BatchItem
-from leadstream.batches.services import ingest_batch, process_chunk
+from leadstream.batches.models import Batch, BatchChunk, BatchItem, ProcessingAttempt
+from leadstream.batches.services import ingest_batch, process_chunk, recover_stalled_work
+from leadstream.tenancy.services import get_internal_tenant
 
 pytestmark = pytest.mark.django_db
 
@@ -132,3 +135,64 @@ def test_pausa_retomada_e_cancelamento_preservam_checkpoint(
     assert chunk.status == BatchChunk.Status.CANCELLED
     assert chunk.checkpoint_row == checkpoint
     assert BatchItem.objects.filter(batch=batch, status=BatchItem.Status.PENDING).exists()
+
+
+def test_scanner_recupera_lease_expirado_e_ingestao_sem_despacho(
+    django_capture_on_commit_callbacks: object,
+) -> None:
+    tenant = get_internal_tenant()
+    received = Batch.objects.create(
+        tenant=tenant,
+        name="Recebido sem broker",
+        source_type=Batch.SourceType.CSV,
+        status=Batch.Status.RECEIVED,
+        idempotency_key="recover-received-001",
+    )
+    running = Batch.objects.create(
+        tenant=tenant,
+        name="Worker interrompido",
+        source_type=Batch.SourceType.CSV,
+        status=Batch.Status.RUNNING,
+        idempotency_key="recover-running-001",
+        total_rows=1,
+    )
+    chunk = BatchChunk.objects.create(
+        tenant=tenant,
+        batch=running,
+        sequence=1,
+        start_row=2,
+        end_row=2,
+        status=BatchChunk.Status.RUNNING,
+        lease_owner="worker-morto",
+        leased_until=timezone.now() - timedelta(seconds=1),
+        attempt_count=1,
+    )
+    attempt = ProcessingAttempt.objects.create(
+        tenant=tenant,
+        chunk=chunk,
+        attempt_number=1,
+        worker_id="worker-morto",
+        status=ProcessingAttempt.Status.STARTED,
+        started_at=timezone.now() - timedelta(minutes=10),
+    )
+
+    with (
+        patch("leadstream.batches.tasks.ingest_batch_task.delay") as ingest_enqueue,
+        patch("leadstream.batches.tasks.process_chunk_task.delay") as chunk_enqueue,
+    ):
+        with django_capture_on_commit_callbacks(execute=True):  # type: ignore[operator]
+            result = recover_stalled_work()
+
+    assert result == {
+        "ingestions_requeued": 1,
+        "chunks_recovered": 1,
+        "chunks_requeued": 1,
+    }
+    ingest_enqueue.assert_called_once_with(str(received.pk))
+    chunk_enqueue.assert_called_once_with(str(chunk.pk))
+    chunk.refresh_from_db()
+    attempt.refresh_from_db()
+    assert chunk.status == BatchChunk.Status.PENDING
+    assert chunk.lease_owner == ""
+    assert chunk.dispatched_at is not None
+    assert attempt.status == ProcessingAttempt.Status.ABANDONED

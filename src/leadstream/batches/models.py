@@ -163,6 +163,7 @@ class BatchChunk(TenantOwnedModel):
     checkpoint_row = models.PositiveIntegerField(default=0)
     lease_owner = models.CharField(max_length=255, blank=True)
     leased_until = models.DateTimeField(null=True, blank=True)
+    dispatched_at = models.DateTimeField(null=True, blank=True)
     attempt_count = models.PositiveIntegerField(default=0)
     max_attempts = models.PositiveIntegerField(default=5)
     last_error_code = models.CharField(max_length=64, blank=True)
@@ -181,7 +182,8 @@ class BatchChunk(TenantOwnedModel):
             ),
         ]
         indexes: ClassVar[list[models.Index]] = [
-            models.Index(fields=("tenant", "status", "leased_until"), name="chunk_lease_idx")
+            models.Index(fields=("tenant", "status", "leased_until"), name="chunk_lease_idx"),
+            models.Index(fields=("status", "dispatched_at"), name="chunk_dispatch_idx"),
         ]
 
     def clean(self) -> None:

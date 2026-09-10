@@ -81,6 +81,6 @@ class BatchChunkSerializer(serializers.ModelSerializer[BatchChunk]):
         fields = (
             "id", "batch", "sequence", "start_row", "end_row", "status",
             "checkpoint_row", "attempt_count", "max_attempts", "last_error_code",
-            "last_error_message", "started_at", "completed_at", "attempts",
+            "last_error_message", "dispatched_at", "started_at", "completed_at", "attempts",
         )
         read_only_fields = fields

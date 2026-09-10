@@ -24,6 +24,8 @@ def test_producao_rejeita_sqlite() -> None:
             "DATABASE_URL": "sqlite:///test.sqlite3",
             "CELERY_BROKER_URL": "amqp://test:test@localhost:5672//",
             "REDIS_URL": "redis://localhost:6379/15",
+            "DATA_HASH_KEY": "test-only-data-hash-key",
+            "DATA_HASH_KEY_VERSION": "v1",
         }
     )
 
@@ -34,6 +36,25 @@ def test_producao_rejeita_sqlite() -> None:
     assert "PostgreSQL" in result.stderr
 
 
+def test_producao_exige_chave_hmac_independente() -> None:
+    environment = _clean_environment()
+    environment.update(
+        {
+            "DJANGO_SECRET_KEY": "test-only-long-secret-that-is-never-used-in-production",
+            "DJANGO_ALLOWED_HOSTS": "test.invalid",
+            "DATABASE_URL": "postgresql://test:test@localhost:5432/test",
+            "CELERY_BROKER_URL": "amqp://test:test@localhost:5672//",
+            "REDIS_URL": "redis://localhost:6379/15",
+        }
+    )
+
+    result = _load_django(environment)
+
+    assert result.returncode != 0
+    assert "DATA_HASH_KEY" in result.stderr
+    assert "test-only-long-secret" not in result.stderr
+
+
 def _clean_environment() -> dict[str, str]:
     environment = os.environ.copy()
     for name in (
@@ -42,6 +63,8 @@ def _clean_environment() -> dict[str, str]:
         "DATABASE_URL",
         "CELERY_BROKER_URL",
         "REDIS_URL",
+        "DATA_HASH_KEY",
+        "DATA_HASH_KEY_VERSION",
     ):
         environment.pop(name, None)
     environment["DJANGO_SETTINGS_MODULE"] = "config.settings.production"

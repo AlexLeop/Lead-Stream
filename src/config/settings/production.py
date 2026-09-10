@@ -14,6 +14,8 @@ ALLOWED_HOSTS = env_list("DJANGO_ALLOWED_HOSTS", required=True)
 production_database_url = required_env("DATABASE_URL")
 CELERY_BROKER_URL = required_env("CELERY_BROKER_URL")
 REDIS_URL = required_env("REDIS_URL")
+DATA_HASH_KEY = required_env("DATA_HASH_KEY")
+DATA_HASH_KEY_VERSION = required_env("DATA_HASH_KEY_VERSION")
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",

@@ -21,6 +21,7 @@ INSTALLED_APPS = [
     "leadstream.tenancy.apps.TenancyConfig",
     "leadstream.entities.apps.EntitiesConfig",
     "leadstream.evidence.apps.EvidenceConfig",
+    "leadstream.governance.apps.GovernanceConfig",
 ]
 
 MIDDLEWARE = [
@@ -82,6 +83,9 @@ APPWRITE_ENDPOINT = env("APPWRITE_ENDPOINT")
 APPWRITE_PROJECT_ID = env("APPWRITE_PROJECT_ID")
 APPWRITE_API_KEY = env("APPWRITE_API_KEY")
 APPWRITE_TIMEOUT_SECONDS = env_int("APPWRITE_TIMEOUT_SECONDS", default=3)
+DATA_HASH_KEY = env("DATA_HASH_KEY", default="dev-only-data-hash-key")
+DATA_HASH_KEY_VERSION = env("DATA_HASH_KEY_VERSION", default="v1")
+DATA_HASH_PREVIOUS_KEYS = env_list("DATA_HASH_PREVIOUS_KEYS", default=[])
 LOG_LEVEL = env("LOG_LEVEL", default="INFO")
 LOGGING = build_logging_config(LOG_LEVEL)
 

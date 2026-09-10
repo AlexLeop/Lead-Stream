@@ -155,8 +155,11 @@ def canonicalize(
         )
         .filter(Q(expires_at__isnull=True) | Q(expires_at__gt=decision_time))
     )
-    if suppression_check is not None:
-        eligible = [item for item in eligible if not suppression_check(item)]
+    if suppression_check is None:
+        from leadstream.governance.services import is_observation_suppressed
+
+        suppression_check = is_observation_suppressed
+    eligible = [item for item in eligible if not suppression_check(item)]
     selected = max(eligible, key=_rank) if eligible else None
     current_version = (
         CanonicalDecision.objects.filter(tenant=tenant, target=target, field_path=field_path)

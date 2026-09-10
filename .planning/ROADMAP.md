@@ -61,7 +61,7 @@ Plans:
 
 **Wave 1**
 
-- [ ] 02-01: Modelar empresa, pessoa, vínculo, contato e perfil.
+- [x] 02-01: Modelar empresa, pessoa, vínculo, contato e perfil.
 
 **Wave 2** *(blocked on Wave 1 completion)*
 
@@ -147,7 +147,7 @@ Plans:
   4. Pipeline bloqueia vulnerabilidades críticas, segredos, migrations inseguras e imagens privilegiadas; riscos altos exigem aceite registrado.
   5. Métricas, alertas, SLOs, runbooks e rollback são exercitados em staging antes do aceite formal de produção.
 
-**Plans:** 4 plans
+**Plans:** 1/3 plans executed
 
 Plans:
 
@@ -163,7 +163,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Fundação Executável | 3/3 | Verification |  |
-| 2. Dados Confiáveis | 0/3 | Not started | - |
+| 2. Dados Confiáveis | 1/3 | In Progress|  |
 | 3. Lotes com Valor Mensurável | 0/3 | Not started | - |
 | 4. Descoberta e Enriquecimento Real | 0/3 | Not started | - |
 | 5. Entrega e Operação Comercial | 0/3 | Not started | - |

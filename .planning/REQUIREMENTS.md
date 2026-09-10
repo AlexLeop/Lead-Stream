@@ -17,9 +17,9 @@
 
 ### Modelo canônico e evidências
 
-- [ ] **DATA-01**: Operador pode registrar empresa brasileira por CNPJ normalizado sem duplicidade dentro do tenant.
-- [ ] **DATA-02**: Operador pode registrar uma pessoa e seus vínculos temporais com empresas, cargos e papéis decisórios.
-- [ ] **DATA-03**: Operador pode registrar e-mail, telefone, estado de WhatsApp e perfis sociais como pontos de contato independentes.
+- [x] **DATA-01**: Operador pode registrar empresa brasileira por CNPJ normalizado sem duplicidade dentro do tenant.
+- [x] **DATA-02**: Operador pode registrar uma pessoa e seus vínculos temporais com empresas, cargos e papéis decisórios.
+- [x] **DATA-03**: Operador pode registrar e-mail, telefone, estado de WhatsApp e perfis sociais como pontos de contato independentes.
 - [ ] **DATA-04**: Todo dado enriquecido mantém fonte, URL ou identificador, instante, método, trecho ou hash, confiança e estado de evidência.
 - [ ] **DATA-05**: Política determinística promove observações ao valor canônico sem transformar inferência ou busca isolada em fato confirmado.
 - [ ] **DATA-06**: Conflitos entre fontes permanecem auditáveis e podem ser recanonizados quando a política muda.

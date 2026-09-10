@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "leadstream.tenancy.apps.TenancyConfig",
     "leadstream.entities.apps.EntitiesConfig",
+    "leadstream.evidence.apps.EvidenceConfig",
 ]
 
 MIDDLEWARE = [

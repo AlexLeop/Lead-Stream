@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: verifying
-stopped_at: Completed 02-02-PLAN.md
-last_updated: "2026-09-10T04:56:13.230Z"
+status: executing
+stopped_at: Starting Phase 3 — Lotes com Valor Mensurável
+last_updated: "2026-09-10T12:00:00-03:00"
 last_activity: 2026-09-10
 progress:
   total_phases: 6
   completed_phases: 1
   total_plans: 7
-  completed_plans: 5
-  percent: 17
+  completed_plans: 6
+  percent: 29
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-09-09)
 
 **Core value:** Entregar somente dados úteis atribuíveis à empresa ou ao decisor correto, com proveniência suficiente para distinguir fato, validação, inferência e ausência de dado.
-**Current focus:** Phase 1 — Fundação Executável
+**Current focus:** Phase 3 — Lotes com Valor Mensurável
 
 ## Current Position
 
-Phase: 1 (Fundação Executável) — HUMAN VERIFICATION
-Plan: 3 of 3
-Status: Phase complete — ready for verification
+Phase: 3 (Lotes com Valor Mensurável)
+Plan: 0 of 3
+Status: Ready to plan and execute
 Last activity: 2026-09-10
 
-Progress: [░░░░░░░░░░] 0%
+Progress: [███░░░░░░░] 29%
 
 ## Performance Metrics
 
@@ -56,6 +56,7 @@ Progress: [░░░░░░░░░░] 0%
 | Phase 1 P03 | 16 min | 3 tasks | 19 files |
 | Phase 02 P01 | 24min | 3 tasks | 11 files |
 | Phase 02 P02 | 31min | 3 tasks | 10 files |
+| Phase 02 P03 | 38min | 3 tasks | 18 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Progress: [░░░░░░░░░░] 0%
 - Phase 1: API sem login exige proteção no gateway antes de exposição pública.
 - Milestone v1.0: a entrega alvo é produção real; fases funcionais não são classificadas como MVP.
 - Milestone v1.0: uma sexta fase bloqueia o go-live até segurança, carga, falhas, restore e SLOs serem comprovados.
+- Phase 2: tenant nunca é aceito do payload; referências cruzadas são rejeitadas.
+- Phase 2: supressão persiste HMAC versionado e canonização exclui dados suprimidos.
 
 ### Roadmap Evolution
 

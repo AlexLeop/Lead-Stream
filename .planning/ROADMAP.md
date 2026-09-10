@@ -69,7 +69,7 @@ Plans:
 
 **Wave 3** *(blocked on Wave 2 completion)*
 
-- [ ] 02-03: Expor APIs do domínio e políticas de retenção/supressão.
+- [x] 02-03: Expor APIs do domínio e políticas de retenção/supressão.
 
 ### Phase 3: Lotes com Valor Mensurável
 
@@ -163,7 +163,7 @@ Plans:
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Fundação Executável | 3/3 | Verification |  |
-| 2. Dados Confiáveis | 2/3 | In Progress|  |
+| 2. Dados Confiáveis | 3/3 | Complete | 2026-09-10 |
 | 3. Lotes com Valor Mensurável | 0/3 | Not started | - |
 | 4. Descoberta e Enriquecimento Real | 0/3 | Not started | - |
 | 5. Entrega e Operação Comercial | 0/3 | Not started | - |

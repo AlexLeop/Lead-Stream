@@ -62,7 +62,7 @@
 
 - [x] **COMP-01**: Todo tratamento pessoal registra finalidade profissional, base operacional, origem e política de retenção.
 - [ ] **COMP-02**: Operador pode suprimir pessoa, domínio, e-mail ou telefone e a supressão é aplicada antes de exportar ou sincronizar.
-- [ ] **COMP-03**: Sistema expira ou marca como desatualizados contatos conforme política configurável sem apagar a trilha de auditoria necessária.
+- [x] **COMP-03**: Sistema expira ou marca como desatualizados contatos conforme política configurável sem apagar a trilha de auditoria necessária.
 - [ ] **COMP-04**: Exportações e logs minimizam dados e nunca incluem segredos de provedores.
 
 ### Exportação e CRM
@@ -132,8 +132,8 @@
 |-------------|-------|--------|
 | FND-01, FND-02, FND-03, FND-04, FND-05, FND-06, FND-07 | Phase 1 | Complete |
 | OPS-01, OPS-04 | Phase 1 | Complete |
-| DATA-01, DATA-02, DATA-03, DATA-04, DATA-05, DATA-06 | Phase 2 | Pending |
-| COMP-01, COMP-02, COMP-03 | Phase 2 | Pending |
+| DATA-01, DATA-02, DATA-03, DATA-04, DATA-05, DATA-06 | Phase 2 | Complete |
+| COMP-01, COMP-02, COMP-03 | Phase 2 | Partial (COMP-02 aguarda integração de saída) |
 | HYG-01, HYG-02, HYG-03 | Phase 3 | Pending |
 | BATCH-01, BATCH-02, BATCH-03, BATCH-04, BATCH-05 | Phase 3 | Pending |
 | BILL-01, BILL-02, BILL-03, BILL-04, BILL-05 | Phase 3 | Pending |

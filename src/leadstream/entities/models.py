@@ -304,3 +304,7 @@ class SocialProfile(TenantOwnedModel):
             raise ValidationError(
                 {"owner": "Perfil social e proprietário devem pertencer ao mesmo tenant."}
             )
+
+
+CONTACT_POINT_STATUS_CHOICES = ContactPoint.Status.choices
+CONTACT_POINT_SCOPE_CHOICES = ContactPoint.Scope.choices

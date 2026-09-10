@@ -72,3 +72,6 @@ class RetentionRun(TenantOwnedModel):
 
     def __str__(self) -> str:
         return f"{self.policy.code}:{self.started_at.isoformat()}"
+
+
+SUPPRESSION_SCOPE_CHOICES = Suppression.Scope.choices

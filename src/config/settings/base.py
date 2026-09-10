@@ -103,6 +103,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "UNAUTHENTICATED_USER": None,
+    "DEFAULT_PAGINATION_CLASS": "leadstream.common.pagination.StandardPagination",
+    "PAGE_SIZE": 50,
 }
 
 SPECTACULAR_SETTINGS = {
@@ -110,4 +112,12 @@ SPECTACULAR_SETTINGS = {
     "DESCRIPTION": "API interna para higienização e enriquecimento confiável de leads.",
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
+    "ENUM_NAME_OVERRIDES": {
+        "ContactStatusEnum": "leadstream.entities.models.CONTACT_POINT_STATUS_CHOICES",
+        "EvidenceStatusEnum": "leadstream.evidence.models.EvidenceStatus.choices",
+        "ConflictStatusEnum": ["OPEN", "RESOLVED"],
+        "RetentionRunStatusEnum": ["RUNNING", "COMPLETED", "FAILED"],
+        "ContactPointScopeEnum": "leadstream.entities.models.CONTACT_POINT_SCOPE_CHOICES",
+        "SuppressionScopeEnum": "leadstream.governance.models.SUPPRESSION_SCOPE_CHOICES",
+    },
 }

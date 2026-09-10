@@ -19,6 +19,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "drf_spectacular",
     "leadstream.tenancy.apps.TenancyConfig",
+    "leadstream.entities.apps.EntitiesConfig",
 ]
 
 MIDDLEWARE = [

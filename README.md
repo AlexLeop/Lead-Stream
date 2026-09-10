@@ -3,9 +3,10 @@
 Novo backend Brasil-first, separado do protótipo original, para higienização e enriquecimento
 de leads com evidência, rastreabilidade de custo e processamento assíncrono.
 
-> Estado atual: a Fase 1 entrega a fundação executável e implantável. Descoberta, higienização,
-> enriquecimento, conectores de CRM e cobrança entram nas fases seguintes do roadmap. Este
-> repositório ainda não representa o produto completo pronto para processar bases reais.
+> Estado atual: a Fase 1 entrega somente a fundação executável e implantável. Descoberta,
+> higienização, enriquecimento, conectores de CRM e cobrança entram nas fases seguintes. A meta
+> deste repositório é produção real, mas nenhum release será classificado como pronto para dados
+> reais antes de concluir os seis gates e emitir o relatório de aceite de produção sem bloqueios.
 
 ## Fundação entregue
 
@@ -85,3 +86,17 @@ Siga o [runbook do EasyPanel](deploy/easypanel.md) e use
 reais pertencem ao cofre do EasyPanel e nunca ao Git.
 
 O planejamento executável e o roadmap ficam em [`.planning/`](.planning/).
+
+## Definition of Done para produção
+
+“Funciona” não é suficiente. O go-live exige, cumulativamente:
+
+- fluxo completo de dados e provedores sem resultados sintéticos;
+- lote de 100 mil entradas com custo, throughput e consumo de memória medidos;
+- retomada após falhas sem perda, cobrança duplicada ou duplicação em CRM;
+- isolamento de tenant, minimização, retenção, supressão e auditoria verificadas;
+- scans de segredo, dependência e imagem sem bloqueador crítico;
+- backup/restore e rollback ensaiados com RPO/RTO registrados;
+- métricas, alertas, runbooks e aceite operacional em staging.
+
+O status verificável de cada item vive em `.planning/REQUIREMENTS.md` e na Fase 6 do roadmap.

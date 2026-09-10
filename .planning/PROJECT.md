@@ -4,7 +4,7 @@
 
 LeadStream Backend é o novo núcleo independente e Brasil-first para extração, higienização e enriquecimento de leads empresariais. A API parte de uma empresa brasileira real, resolve seus decisores, encontra contatos e perfis públicos atribuíveis a essas pessoas e registra evidência, confiança, atualização, custo e cobrança por bloco efetivamente entregue.
 
-O primeiro marco será usado internamente pelo proprietário e processará lotes de até 100 mil empresas sem modificar ou depender do backend atual. O desenho nasce preparado para múltiplos clientes e CRMs, mas sem autenticação de usuários na primeira versão.
+O primeiro marco será usado internamente pelo proprietário e processará lotes de até 100 mil empresas sem modificar ou depender do backend atual. A entrega alvo é um backend de produção completo — não uma demonstração ou MVP — preparado para múltiplos clientes e CRMs, mas sem autenticação de usuários enquanto a operação permanecer interna e protegida no perímetro.
 
 ## Core Value
 
@@ -31,6 +31,8 @@ Entregar somente dados úteis atribuíveis à empresa ou ao decisor correto, com
 - [ ] Aplicar minimização, retenção, supressão e rastreabilidade compatíveis com o tratamento profissional de dados pessoais.
 - [ ] Oferecer observabilidade operacional, health checks, métricas, logs estruturados e rastreamento de falhas por provedor.
 - [ ] Ser implantável no EasyPanel com recursos limitados, mantendo dados brutos e arquivos volumosos fora da VPS.
+- [ ] Passar por testes de carga, retomada após falhas, backup/restore, segurança de dependências e aceite operacional antes de receber dados reais em produção.
+- [ ] Definir SLOs, alertas, RPO/RTO e rollback verificáveis, sem classificar código apenas funcional como pronto para produção.
 
 ### Out of Scope
 
@@ -77,7 +79,7 @@ Entregar somente dados úteis atribuíveis à empresa ou ao decisor correto, com
 | Celery e RabbitMQ para jobs duráveis | Lotes extensos não podem depender de requisições HTTP ou memória de um processo | — Pending |
 | Redis para cache e rate limiting | Permite cotas atômicas e coordenação entre workers | — Pending |
 | Jobs em chunks, não um job por registro | Reduz overhead de fila sem perder retomada e isolamento de falhas | — Pending |
-| Multi-tenant desde o primeiro schema | Evita uma migração estrutural futura, mantendo tenant interno padrão no MVP | — Pending |
+| Multi-tenant desde o primeiro schema | Evita uma migração estrutural futura, mantendo tenant interno padrão durante a operação interna | — Pending |
 | Cobrança por bloco entregue | Alinha preço ao valor recebido e torna falhas e ausências não faturáveis | — Pending |
 | Evidência como requisito do dado | Impede que heurísticas, snippets e dados sintéticos sejam vendidos como fatos | — Pending |
 
@@ -99,4 +101,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-09-09 after initialization*
+*Last updated: 2026-09-09 after production-scope correction*

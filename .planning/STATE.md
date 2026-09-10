@@ -7,7 +7,7 @@ stopped_at: Phase 1 automated verification passed; container and EasyPanel UAT p
 last_updated: "2026-09-09T23:39:00.000Z"
 last_activity: 2026-09-09
 progress:
-  total_phases: 5
+  total_phases: 6
   completed_phases: 0
   total_plans: 3
   completed_plans: 3
@@ -65,6 +65,12 @@ Progress: [░░░░░░░░░░] 0%
 - Phase 1: Nenhuma credencial real entra no Git.
 - Phase 1: Migrations são executadas por release explícito, nunca no startup concorrente.
 - Phase 1: API sem login exige proteção no gateway antes de exposição pública.
+- Milestone v1.0: a entrega alvo é produção real; fases funcionais não são classificadas como MVP.
+- Milestone v1.0: uma sexta fase bloqueia o go-live até segurança, carga, falhas, restore e SLOs serem comprovados.
+
+### Roadmap Evolution
+
+- Phase 6 added: endurecimento, segurança, testes de carga, recuperação e aceite de produção.
 
 ### Pending Todos
 

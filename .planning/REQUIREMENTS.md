@@ -83,6 +83,19 @@
 - [x] **OPS-04**: Pipeline de qualidade executa lint, tipos, migrations check e testes antes do build de produção.
 - [ ] **OPS-05**: Operador possui runbook de implantação, backup, restore, rotação de credenciais e recuperação de lote.
 
+### Segurança e aceite de produção
+
+- [ ] **SEC-01**: Segredos de banco, broker, Appwrite, provedores e CRMs permanecem fora de código, imagem, logs e exports, com procedimento testado de rotação e menor privilégio.
+- [ ] **SEC-02**: Dados pessoais e credenciais usam TLS em trânsito, criptografia adequada em repouso e acesso restrito à rede ou serviço necessário.
+- [ ] **SEC-03**: API aplica limites de corpo, paginação, timeout, rate limit e proteção perimetral; endpoints internos não podem ser expostos anonimamente.
+- [ ] **SEC-04**: CI gera inventário de dependências e bloqueia segredo detectado, vulnerabilidade crítica conhecida, migration insegura e container privilegiado.
+- [ ] **PROD-01**: Teste reproduzível processa 100 mil entradas no perfil da VPS sem OOM e registra throughput, p95, filas, custo e tempo total.
+- [ ] **PROD-02**: Testes de falha e replay comprovam retomada após reinício de API, worker, broker e cache sem perder progresso nem duplicar cobrança ou CRM.
+- [ ] **PROD-03**: Backup e restauração de PostgreSQL e objetos são ensaiados, verificados por integridade e associados a RPO/RTO documentados.
+- [ ] **PROD-04**: Staging reproduz produção e valida migrations, compatibilidade reversa, rollback de imagem e deploy sem iniciar migrations concorrentes.
+- [ ] **PROD-05**: SLOs e alertas cobrem disponibilidade, backlog, latência, erro, retry, circuit breaker, orçamento, cobertura e falha de backup.
+- [ ] **PROD-06**: Um relatório de aceite reúne evidências de segurança, carga, recuperação, LGPD, custos e operação e impede declarar produção pronta enquanto houver bloqueador.
+
 ## v2 Requirements
 
 ### Acesso externo
@@ -131,13 +144,15 @@
 | EXP-01, EXP-02, EXP-03 | Phase 5 | Pending |
 | CRM-01, CRM-02, CRM-03, CRM-04 | Phase 5 | Pending |
 | COMP-04, OPS-05 | Phase 5 | Pending |
+| SEC-01, SEC-02, SEC-03, SEC-04 | Phase 6 | Pending |
+| PROD-01, PROD-02, PROD-03, PROD-04, PROD-05, PROD-06 | Phase 6 | Pending |
 
 **Coverage:**
 
-- v1 requirements: 51 total
-- Mapped to phases: 51
+- v1 requirements: 61 total
+- Mapped to phases: 61
 - Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2026-09-09*
-*Last updated: 2026-09-09 after Phase 1 execution*
+*Last updated: 2026-09-09 after production-scope correction*

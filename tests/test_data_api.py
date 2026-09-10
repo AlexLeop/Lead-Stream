@@ -7,6 +7,7 @@ from django.utils import timezone
 from rest_framework.test import APIClient
 
 from leadstream.entities.services import create_company
+from leadstream.evidence.models import ProcessingPurpose, RetentionPolicy, Source
 from leadstream.tenancy.models import Tenant
 
 pytestmark = pytest.mark.django_db
@@ -230,3 +231,63 @@ def test_api_rejeita_tenant_arbitrario_e_isola_listagem(api_client: APIClient) -
     payload = response.json()
     assert payload["count"] == 1
     assert payload["results"][0]["entity_id"] == created["entity_id"]
+
+
+def test_api_bloqueia_referencias_cruzadas_entre_tenants(api_client: APIClient) -> None:
+    other = Tenant.objects.create(slug="isolated", name="Tenant isolado")
+    foreign_company = create_company(
+        tenant=other,
+        cnpj="11.222.333/0001-81",
+        legal_name="Empresa de outro tenant",
+    )
+    foreign_purpose = ProcessingPurpose.objects.create(
+        tenant=other,
+        code="foreign-purpose",
+        name="Finalidade externa",
+        operational_basis="Teste de isolamento",
+    )
+    foreign_retention = RetentionPolicy.objects.create(
+        tenant=other,
+        code="foreign-retention",
+        name="Retenção externa",
+        stale_after_days=30,
+        retention_days=90,
+    )
+    foreign_source = Source.objects.create(
+        tenant=other,
+        slug="foreign-source",
+        name="Fonte externa",
+        category=Source.Category.PUBLIC_WEB,
+    )
+
+    contact_response = api_client.post(
+        "/api/v1/dados/contatos/",
+        {
+            "owner": str(foreign_company.company.entity_id),
+            "kind": "EMAIL",
+            "original_value": "cross-tenant@example.com",
+        },
+        format="json",
+    )
+    assert contact_response.status_code == 400
+
+    record_response = api_client.post(
+        "/api/v1/dados/fontes/registros/",
+        {
+            "source": str(foreign_source.pk),
+            "purpose": str(foreign_purpose.pk),
+            "retention_policy": str(foreign_retention.pk),
+            "source_url": "https://example.test/foreign",
+            "captured_at": timezone.now().isoformat(),
+            "payload_hash": "d" * 64,
+        },
+        format="json",
+    )
+    assert record_response.status_code == 400
+
+    retention_response = api_client.post(
+        "/api/v1/dados/retencao/aplicar/",
+        {"policy": str(foreign_retention.pk)},
+        format="json",
+    )
+    assert retention_response.status_code == 400

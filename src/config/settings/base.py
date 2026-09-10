@@ -23,6 +23,7 @@ INSTALLED_APPS = [
     "leadstream.evidence.apps.EvidenceConfig",
     "leadstream.governance.apps.GovernanceConfig",
     "leadstream.batches.apps.BatchesConfig",
+    "leadstream.billing.apps.BillingConfig",
 ]
 
 MIDDLEWARE = [
@@ -124,5 +125,6 @@ SPECTACULAR_SETTINGS = {
         "RetentionRunStatusEnum": ["RUNNING", "COMPLETED", "FAILED"],
         "ContactPointScopeEnum": "leadstream.entities.models.CONTACT_POINT_SCOPE_CHOICES",
         "SuppressionScopeEnum": "leadstream.governance.models.SUPPRESSION_SCOPE_CHOICES",
+        "DataBlockEnum": "leadstream.billing.models.DATA_BLOCK_CHOICES",
     },
 }

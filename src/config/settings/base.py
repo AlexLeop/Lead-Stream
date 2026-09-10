@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "leadstream.entities.apps.EntitiesConfig",
     "leadstream.evidence.apps.EvidenceConfig",
     "leadstream.governance.apps.GovernanceConfig",
+    "leadstream.batches.apps.BatchesConfig",
 ]
 
 MIDDLEWARE = [
@@ -86,6 +87,10 @@ APPWRITE_TIMEOUT_SECONDS = env_int("APPWRITE_TIMEOUT_SECONDS", default=3)
 DATA_HASH_KEY = env("DATA_HASH_KEY", default="dev-only-data-hash-key")
 DATA_HASH_KEY_VERSION = env("DATA_HASH_KEY_VERSION", default="v1")
 DATA_HASH_PREVIOUS_KEYS = env_list("DATA_HASH_PREVIOUS_KEYS", default=[])
+BATCH_STORAGE_ROOT = Path(env("BATCH_STORAGE_ROOT", default=str(BASE_DIR / "data" / "batches")))
+BATCH_MAX_UPLOAD_BYTES = env_int("BATCH_MAX_UPLOAD_BYTES", default=50 * 1024 * 1024)
+BATCH_MAX_ROWS = env_int("BATCH_MAX_ROWS", default=100_000)
+BATCH_LEASE_SECONDS = env_int("BATCH_LEASE_SECONDS", default=300)
 LOG_LEVEL = env("LOG_LEVEL", default="INFO")
 LOGGING = build_logging_config(LOG_LEVEL)
 

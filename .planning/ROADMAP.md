@@ -59,8 +59,16 @@ Plans:
 
 Plans:
 
+**Wave 1**
+
 - [ ] 02-01: Modelar empresa, pessoa, vínculo, contato e perfil.
+
+**Wave 2** *(blocked on Wave 1 completion)*
+
 - [ ] 02-02: Implementar observações, evidências, canonização e conflitos.
+
+**Wave 3** *(blocked on Wave 2 completion)*
+
 - [ ] 02-03: Expor APIs do domínio e políticas de retenção/supressão.
 
 ### Phase 3: Lotes com Valor Mensurável
